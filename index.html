@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>
+GeoPrecision Pro
+</title>
+
+<link rel="stylesheet"
+href="style.css">
+
+<link rel="icon"
+href="assets/icon.png">
+
+<link rel="preconnect"
+href="https://fonts.googleapis.com">
+
+<link rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap"
+rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/proj4@2.9.0/dist/proj4.js"></script>
+
+</head>
+
+<body>
+
+<!-- SPLASH -->
+
+<div id="splash">
+
+<img src="assets/splash.png"
+class="splash-logo">
+
+<h1>
+GeoPrecision Pro
+</h1>
+
+<p>
+Professional Coordinate Converter
+</p>
+
+<div class="splash-dev">
+Developed By
+Eng-Marco Demitry
+</div>
+
+</div>
+
+<!-- CONTAINER -->
+
+<div class="container">
+
+<!-- LOGO -->
+
+<div class="logo-area">
+
+<img src="assets/logo.png"
+class="logo">
+
+<h1>
+GeoPrecision Pro
+</h1>
+
+<p class="developer">
+
+Developed By
+
+<span>
+Eng-Marco Demitry
+</span>
+
+</p>
+
+</div>
+
+<!-- INDICATION -->
+
+<div class="card">
+
+<div class="card-title">
+
+Coordinate Indication
+
+</div>
+
+<div class="indicator-box">
+
+<div class="indicator-item">
+
+<span class="indicator-main">
+
+Latitude
+
+</span>
+
+<span class="indicator-arrow">
+
+↔
+
+</span>
+
+<span class="indicator-main">
+
+Northing
+
+</span>
+
+</div>
+
+<div class="indicator-item">
+
+<span class="indicator-main">
+
+Longitude
+
+</span>
+
+<span class="indicator-arrow">
+
+↔
+
+</span>
+
+<span class="indicator-main">
+
+Easting
+
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- SYSTEM -->
+
+<div class="card">
+
+<div class="card-title">
+
+Coordinate System
+
+</div>
+
+<select id="coordinateSystem">
+
+<option value="wgs84">
+
+WGS84 / UTM 36N
+
+</option>
+
+<option value="redbelt">
+
+Egypt Red Belt
+
+</option>
+
+<option value="purplebelt">
+
+Egypt Purple Belt
+
+</option>
+
+</select>
+
+<div class="hint-box"
+id="systemHint">
+
+Used for:
+GPS, Google Maps,
+Modern GIS Systems
+
+</div>
+
+</div>
+
+<!-- MODE -->
+
+<div class="card">
+
+<div class="card-title">
+
+Conversion Type
+
+</div>
+
+<select id="mode">
+
+<option value="decimal">
+
+Lat / Long → UTM
+
+</option>
+
+<option value="utm">
+
+UTM → Lat / Long
+
+</option>
+
+</select>
+
+</div>
+
+<!-- DECIMAL -->
+
+<div class="card"
+id="decimalCard">
+
+<div class="card-title">
+
+Latitude & Longitude
+
+</div>
+
+<label>
+Latitude
+</label>
+
+<input type="number"
+id="lat"
+step="any">
+
+<label>
+Longitude
+</label>
+
+<input type="number"
+id="lon"
+step="any">
+
+<button class="btn"
+onclick="convertDecimalToUTM()">
+
+Convert To UTM
+
+</button>
+
+</div>
+
+<!-- UTM -->
+
+<div class="card"
+id="utmCard"
+style="display:none;">
+
+<div class="card-title">
+
+Northing & Easting
+
+</div>
+
+<input type="number"
+id="utmEasting"
+placeholder="Easting">
+
+<input type="number"
+id="utmNorthing"
+placeholder="Northing">
+
+<button class="btn"
+onclick="convertUTMToLatLon()">
+
+Convert To Lat / Long
+
+</button>
+
+</div>
+
+<!-- RESULTS -->
+
+<div class="card">
+
+<div class="card-title">
+
+Results
+
+</div>
+
+<div class="result">
+
+<div class="result-title">
+System
+</div>
+
+<div class="result-value"
+id="zone">
+
+---
+
+</div>
+
+</div>
+
+<div class="result">
+
+<div class="result-title">
+Easting
+</div>
+
+<div class="result-value"
+id="easting">
+
+---
+
+</div>
+
+</div>
+
+<div class="result">
+
+<div class="result-title">
+Northing
+</div>
+
+<div class="result-value"
+id="northing">
+
+---
+
+</div>
+
+</div>
+
+<div class="result">
+
+<div class="result-title">
+Latitude
+</div>
+
+<div class="result-value"
+id="resultLat">
+
+---
+
+</div>
+
+</div>
+
+<div class="result">
+
+<div class="result-title">
+Longitude
+</div>
+
+<div class="result-value"
+id="resultLon">
+
+---
+
+</div>
+
+</div>
+
+</div>
+
+<!-- DMS RESULTS -->
+
+<div class="card">
+
+<div class="card-title">
+
+DMS Results
+
+</div>
+
+<label>
+Latitude DMS
+</label>
+
+<div class="dms-group">
+
+<input id="dmsLatDeg"
+readonly
+placeholder="Deg">
+
+<input id="dmsLatMin"
+readonly
+placeholder="Min">
+
+<input id="dmsLatSec"
+readonly
+placeholder="Sec">
+
+<input id="dmsLatDir"
+readonly
+placeholder="Dir">
+
+</div>
+
+<label>
+Longitude DMS
+</label>
+
+<div class="dms-group">
+
+<input id="dmsLonDeg"
+readonly
+placeholder="Deg">
+
+<input id="dmsLonMin"
+readonly
+placeholder="Min">
+
+<input id="dmsLonSec"
+readonly
+placeholder="Sec">
+
+<input id="dmsLonDir"
+readonly
+placeholder="Dir">
+
+</div>
+
+</div>
+
+<!-- BUTTONS -->
+
+<div class="buttons">
+
+<button class="secondary-btn"
+onclick="copyResults()">
+
+Copy Results
+
+</button>
+
+<button class="secondary-btn"
+onclick="openMap()">
+
+Open Map
+
+</button>
+
+</div>
+
+<!-- FOOTER -->
+
+<div class="footer">
+
+GeoPrecision Pro © 2026
+
+<br>
+
+Developed By
+Eng-Marco Demitry
+
+</div>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+
+</html>
